@@ -25,7 +25,6 @@
 ; 		/follow nameofmaincharacter
 ; 		/petfollow nameofmaincharacter
 ; 		/target focustarget
-;
 
 
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
@@ -37,20 +36,8 @@ SetBatchLines, -1
 WinGet, wowid, List, World of Warcraft
 IfWinExist, ahk_id %wowid1% and winexist ahk_id %wowid2%
 {	
-	gosub, winrestore
-	gosub, alwaysontopoff
-	winmaximize, ahk_id %wowid1%
-	w1a := A_ScreenWidth * 1
-	h1a := A_ScreenHeight * 1
-	w2a := A_ScreenWidth * 1
-	h2a := A_ScreenHeight * 1
-	winmove, ahk_id %wowid1%, ,0,0,%w1a%,%h1a%	
-	WinGetPos, x1, y1, w1, h1, ahk_id %wowid1%
-	gosub, winrestore
-	winmove, ahk_id %wowid2%, ,%w1a%,0,%w1a%,%h1a%
-	winmaximize, ahk_id %wowid1%
-	winset, alwaysontop, on, ahk_id %wowid2%
-	winactivate, ahk_id %wowid1%
+    gosub, dualscreen
+    
  }
  else
  {
@@ -67,67 +54,100 @@ IfWinExist, ahk_id %wowid1% and winexist ahk_id %wowid2%
 Suspend, Toggle
 if A_IsSuspended = 1
 {
+gosub, alwaysontopoff
 ToolTip, Enikmas DualScreen Boxer Suspended, A_ScreenWidth/2, A_ScreenHeight/2, 1
-soundplay, *63
 }
 if A_IsSuspended = 0
 {
 ToolTip, , 0, 0, 1
-soundplay, *64
+ToolTip, Enikmas DualScreen Boxer Resumed, A_ScreenWidth/2, A_ScreenHeight/2, 1
 }
 Return
 ;--------------------------------------------------------------
 ~ScrollLock:: ; ScrollLock reloads the current script.
 Reload
+ToolTip, Enikmas DualScreen Boxer Reloaded, A_ScreenWidth/2, A_ScreenHeight/2, 1
 Return
 ;--------------------------------------------------------------
+
+
 ~F1:: ; Sets your defined primary window the the foreground
-gosub, alwaysontopoff
-gosub, winrestore
-winmove, ahk_id %wowid2%, ,1920,0,1920,1080
-winmaximize, ahk_id %wowid1%
-winset, alwaysontop, on, ahk_id %wowid2%
-winactivate, ahk_id %wowid1%
-Return
-;--------------------------------------------------------------
-~F2:: ; Sets your defined secondary window the the foreground
-gosub, alwaysontopoff
-gosub, winrestore
-winmove, ahk_id %wowid1%, ,1920,0,1920,1080
-winmaximize, ahk_id %wowid2%
-winset, alwaysontop, on, ahk_id %wowid1%
-TrayTip , , WINDOW #2, 3, 1
-winactivate, ahk_id %wowid2%
+gosub, dualscreen
+Return 
+~F2:: ; Sets your defined primary window the the foreground
+gosub, pip
+Return 
+~Tab:: ; Sets your defined secondary window the the foreground
+gosub, swap
 Return
 
-;--------------------------------------------------------------
-window1:
-{
-~+F1:: ; Loads Window Profile #1
+
+dualscreen:
 gosub, alwaysontopoff
 gosub, winrestore
-winmaximize, ahk_id %wowid1%
+w1a := A_ScreenWidth * 1
+h1a := A_ScreenHeight * 1
+w2a := A_ScreenWidth * 1
+h2a := A_ScreenHeight * 1
+w1 := A_ScreenWidth * 1
+h1 := 0
+winmove, ahk_id %wowid1%, ,0,0,%w1a%,%h1a%	
 winmove, ahk_id %wowid2%, ,%w1%,%h1%,%w2a%,%h2a%
+winmaximize, ahk_id %wowid1%
 winset, alwaysontop, on, ahk_id %wowid2%
 winactivate, ahk_id %wowid1%
 Return
-}
+
+
+pip:
+w1a := A_ScreenWidth * .75
+h1a := A_ScreenHeight * .75
+w2a := A_ScreenWidth * .25
+h2a := A_ScreenHeight * .25
+winmove, ahk_id %wowid1%, ,0,0,%w1a%,%h1a%
+WinGetPos, x1, y1, w1, h1, ahk_id %wowid1%
+winmove, ahk_id %wowid2%, ,%w1%,%h1%,%w2a%,%h2a%
+winmaximize, ahk_id %wowid1%
+winset, alwaysontop, on, ahk_id %wowid2%
+winactivate, ahk_id %wowid1%
+Return
+
+swap:
+switch1 = %wowid1%
+switch2 = %wowid2%
+wowid1 := switch2
+wowid2 := switch1
+gosub, dualscreen
+return
+
+
+close:
+gosub, alwaysontopoff
+exitapp
+
+alwaysontopoff:
+winset, alwaysontop, off, ahk_id %wowid1%
+winset, alwaysontop, off, ahk_id %wowid2%
+return 
+
+winrestore:
+winrestore, ahk_id %wowid1%
+winrestore, ahk_id %wowid2%
+return
 
 ;**************************************************************
 ;*************** Standard Keyboard Hotkeys ****************
 ;**************************************************************
 
-~Numpad1::
-~Numpad2::
-~Numpad3::
-~Numpad4::
-~Numpad5::
-~Numpad6::
-~Numpad7::
-~Numpad8::
-~Numpad9::
-~Numpad0::
+~1::
+~2::
+~3::
 ~g::
+~f::
+~q::
+~e::
+~r::
+
 
 IfWinActive, ahk_id %wowid1%
 {
@@ -141,16 +161,6 @@ Return
 ;************ SHIFT + Standard Keyboard Keys **************
 ;**************************************************************
  
-~+Numpad1::
-~+Numpad2::
-~+Numpad3::
-~+Numpad4::
-~+Numpad5::
-~+Numpad6::
-~+Numpad7::
-~+Numpad8::
-~+Numpad9::
-~+Numpad0::
 ~+g::
 
 IfWinActive, ahk_id %wowid1%
@@ -179,18 +189,6 @@ Return
 IfWinActive, ahk_id %wowid2%
 {
 ControlSend,, {Enter}, ahk_id %wowid1%
-Return
-}
-;--------------------------------------------------------------
-~Tab::
-IfWinActive, ahk_id %wowid1%
-{
-ControlSend,, {Tab}, ahk_id %wowid2%
-Return
-}
-IfWinActive, ahk_id %wowid2%
-{
-ControlSend,, {Tab}, ahk_id %wowid1%
 Return
 }
 ;--------------------------------------------------------------
@@ -233,103 +231,36 @@ Return
 ;**************************************************************
 ;********************** ARROW Keys ************************
 ;**************************************************************
- 
+IfWinActive, ahk_id %wowid1%
+{
 ~Up::
-IfWinActive, World of Warcraft
-{
 ControlSend,, {up down}, ahk_id %wowid2%
-loop
-{
-getkeystate, state, up
-if state = U
-break
-}
+Keywait,up,up
 ControlSend,, {up up}, ahk_id %wowid2%
 Return
-}
-;--------------------------------------------------------------
+
 ~Down::
-IfWinActive, World of Warcraft
-{
-ControlSend,, {down down}, ahk_id %wowid2%
-loop
-{
-getkeystate, state, down
-if state = U
-break
-}
-ControlSend,, {down up}, ahk_id %wowid2%
+ControlSend,, {Down down}, ahk_id %wowid2%
+Keywait,Down,up
+ControlSend,, {Down up}, ahk_id %wowid2%
 Return
-}
-;--------------------------------------------------------------
+
 ~Left::
-IfWinActive, World of Warcraft
-{
 ControlSend,, {Left down}, ahk_id %wowid2%
-loop
-{
-getkeystate, state, Left
-if state = U
-break
-}
+Keywait,Left,up
 ControlSend,, {Left up}, ahk_id %wowid2%
 Return
-}
-;--------------------------------------------------------------
+
 ~Right::
-IfWinActive, World of Warcraft
-{
 ControlSend,, {Right down}, ahk_id %wowid2%
-loop
-{
-getkeystate, state, Right
-if state = U
-break
-}
+Keywait,Right,up
 ControlSend,, {Right up}, ahk_id %wowid2%
 Return
-}
 
 ~Space::
-IfWinActive, World of Warcraft
-{
 ControlSend,, {Space down}, ahk_id %wowid2%
-loop
-{
-getkeystate, state, Space
-if state = U
-break
-}
+Keywait,Space,up
 ControlSend,, {Space up}, ahk_id %wowid2%
 Return
-}
- 
-;**************************************************************
-;************************ CLOSE ***************************
-;**************************************************************
 
-close:
-winset, alwaysontop, off, ahk_id %wowid1%
-winset, alwaysontop, off, ahk_id %wowid2%
-winmove, ahk_id %wowid1%, ,1920,0,1920,1080
-winmove, ahk_id %wowid2%, ,1920,0,1920,1080
-exitapp
-
- 
-;**************************************************************
-;*******************  Windows to Backround ********************
-;**************************************************************
-
-alwaysontopoff:
-winset, alwaysontop, off, ahk_id %wowid1%
-winset, alwaysontop, off, ahk_id %wowid2%
-return 
-
-;**************************************************************
-;*******************  Windows Restored *** ********************
-;**************************************************************
-
-winrestore:
-winrestore, ahk_id %wowid1%
-winrestore, ahk_id %wowid2%
-return
+} 
