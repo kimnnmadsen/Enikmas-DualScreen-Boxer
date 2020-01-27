@@ -117,7 +117,6 @@ switch1 = %wowid1%
 switch2 = %wowid2%
 wowid1 := switch2
 wowid2 := switch1
-gosub, dualscreen
 return
 
 
@@ -180,6 +179,16 @@ Return
 ;*************** Special Hotkeys *****************
 ;**************************************************************
 
+
+~Numpad0::
+ControlSend,, {Numpad0}, ahk_id %wowid2%
+Return
+
+
+~Numpad1::
+ControlSend,, {Numpad1}, ahk_id %wowid2%
+Return
+
 ~Enter::
 IfWinActive, ahk_id %wowid1%
 {
@@ -191,52 +200,58 @@ IfWinActive, ahk_id %wowid2%
 ControlSend,, {Enter}, ahk_id %wowid1%
 Return
 }
+Return
 
  
 ;**************************************************************
 ;********************** Movement Keys ************************
 ;**************************************************************
-IfWinActive, ahk_id %wowid1%
+IfWinActive, World of Warcraft
 {
 ~Up::
 ControlSend,, {Up down}, ahk_id %wowid2%
-winactivate, ahk_id %wowid2%
 Keywait,Up,up
 ControlSend,, {Up up}, ahk_id %wowid2%
-winactivate, ahk_id %wowid1%
 Return
 
 ~Down::
 ControlSend,, {Down down}, ahk_id %wowid2%
-winactivate, ahk_id %wowid2%
 Keywait,Down,up
 ControlSend,, {Down up}, ahk_id %wowid2%
-winactivate, ahk_id %wowid1%
 Return
 
 ~Left::
 ControlSend,, {Left down}, ahk_id %wowid2%
-winactivate, ahk_id %wowid2%
 Keywait,Left,up
 ControlSend,, {Left up}, ahk_id %wowid2%
-winactivate, ahk_id %wowid1%
 Return
-
+}
 
 ~Right::
-ControlSend,, {Right down}, ahk_id %wowid2%
-winactivate, ahk_id %wowid2%
-Keywait,Right,up
+IfWinActive, World of Warcraft
+{
+    ControlSend,, {Right down}, ahk_id %wowid2%
+    loop
+{
+getkeystate, state, Right
+if state = U
+break
+}
 ControlSend,, {Right up}, ahk_id %wowid2%
-winactivate, ahk_id %wowid1%
 Return
+}
 
 ~Space::
+IfWinActive, World of Warcraft
+{
 ControlSend,, {Space down}, ahk_id %wowid2%
-winactivate, ahk_id %wowid2%
-Keywait,Space,up
+loop
+{
+getkeystate, state, Space
+if state = U
+break
+}
 ControlSend,, {Space up}, ahk_id %wowid2%
-winactivate, ahk_id %wowid1%
 Return
+}
 
-} 
