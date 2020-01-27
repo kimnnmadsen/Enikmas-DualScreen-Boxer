@@ -36,7 +36,7 @@ SetBatchLines, -1
 WinGet, wowid, List, World of Warcraft
 IfWinExist, ahk_id %wowid1% and winexist ahk_id %wowid2%
 {	
-    gosub, dualscreen
+    gosub, pip
     
  }
  else
@@ -100,13 +100,13 @@ Return
 
 
 pip:
-w1a := A_ScreenWidth * .75
-h1a := A_ScreenHeight * .75
 w2a := A_ScreenWidth * .25
 h2a := A_ScreenHeight * .25
+w1 := 0
+h1 := 0
 winmove, ahk_id %wowid1%, ,0,0,%w1a%,%h1a%
 WinGetPos, x1, y1, w1, h1, ahk_id %wowid1%
-winmove, ahk_id %wowid2%, ,%w1%,%h1%,%w2a%,%h2a%
+winmove, ahk_id %wowid2%, ,0,0,%w2a%,%h2a%
 winmaximize, ahk_id %wowid1%
 winset, alwaysontop, on, ahk_id %wowid2%
 winactivate, ahk_id %wowid1%
@@ -177,9 +177,9 @@ Return
 }
  
 ;**************************************************************
-;*************** Start of Special Hotkeys *****************
+;*************** Special Hotkeys *****************
 ;**************************************************************
- 
+
 ~Enter::
 IfWinActive, ahk_id %wowid1%
 {
@@ -191,76 +191,52 @@ IfWinActive, ahk_id %wowid2%
 ControlSend,, {Enter}, ahk_id %wowid1%
 Return
 }
-;--------------------------------------------------------------
-~Delete::
-IfWinActive, ahk_id %wowid1%
-{
-ControlSend,, {Delete}, ahk_id %wowid2%
-Return
-}
-IfWinActive, ahk_id %wowid2%
-{
-ControlSend,, {Delete}, ahk_id %wowid1%
-Return
-}
-;--------------------------------------------------------------
-~BackSpace::
-IfWinActive, ahk_id %wowid1%
-{
-ControlSend,, {backspace}, ahk_id %wowid2%
-Return
-}
-IfWinActive, ahk_id %wowid2%
-{
-ControlSend,, {backspace}, ahk_id %wowid1%
-Return
-}
-;--------------------------------------------------------------
-~Escape::
-IfWinActive, ahk_id %wowid1%
-{
-ControlSend,, {escape}, ahk_id %wowid2%
-Return
-}
-IfWinActive, ahk_id %wowid2%
-{
-ControlSend,, {escape}, ahk_id %wowid1%
-Return
-}
+
  
 ;**************************************************************
-;********************** ARROW Keys ************************
+;********************** Movement Keys ************************
 ;**************************************************************
 IfWinActive, ahk_id %wowid1%
 {
 ~Up::
-ControlSend,, {up down}, ahk_id %wowid2%
-Keywait,up,up
-ControlSend,, {up up}, ahk_id %wowid2%
+ControlSend,, {Up down}, ahk_id %wowid2%
+winactivate, ahk_id %wowid2%
+Keywait,Up,up
+ControlSend,, {Up up}, ahk_id %wowid2%
+winactivate, ahk_id %wowid1%
 Return
 
 ~Down::
 ControlSend,, {Down down}, ahk_id %wowid2%
+winactivate, ahk_id %wowid2%
 Keywait,Down,up
 ControlSend,, {Down up}, ahk_id %wowid2%
+winactivate, ahk_id %wowid1%
 Return
 
 ~Left::
 ControlSend,, {Left down}, ahk_id %wowid2%
+winactivate, ahk_id %wowid2%
 Keywait,Left,up
 ControlSend,, {Left up}, ahk_id %wowid2%
+winactivate, ahk_id %wowid1%
 Return
+
 
 ~Right::
 ControlSend,, {Right down}, ahk_id %wowid2%
+winactivate, ahk_id %wowid2%
 Keywait,Right,up
 ControlSend,, {Right up}, ahk_id %wowid2%
+winactivate, ahk_id %wowid1%
 Return
 
 ~Space::
 ControlSend,, {Space down}, ahk_id %wowid2%
+winactivate, ahk_id %wowid2%
 Keywait,Space,up
 ControlSend,, {Space up}, ahk_id %wowid2%
+winactivate, ahk_id %wowid1%
 Return
 
 } 
