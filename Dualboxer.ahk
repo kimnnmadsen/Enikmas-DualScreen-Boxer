@@ -77,7 +77,7 @@ Return
 ~F2:: ; Sets your defined primary window the the foreground
 gosub, pip
 Return 
-~Tab:: ; Sets your defined secondary window the the foreground
+~+Tab:: ; Sets your defined secondary window the the foreground
 gosub, swap
 Return
 
