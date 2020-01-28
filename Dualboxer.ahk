@@ -36,7 +36,7 @@ SetBatchLines, -1
 WinGet, wowid, List, World of Warcraft
 IfWinExist, ahk_id %wowid1% and winexist ahk_id %wowid2%
 {	
-    gosub, pip
+    gosub, dualscreen
     
  }
  else
@@ -55,18 +55,14 @@ Suspend, Toggle
 if A_IsSuspended = 1
 {
 gosub, alwaysontopoff
-ToolTip, Enikmas DualScreen Boxer Suspended, A_ScreenWidth/2, A_ScreenHeight/2, 1
 }
 if A_IsSuspended = 0
 {
-ToolTip, , 0, 0, 1
-ToolTip, Enikmas DualScreen Boxer Resumed, A_ScreenWidth/2, A_ScreenHeight/2, 1
 }
 Return
 ;--------------------------------------------------------------
 ~ScrollLock:: ; ScrollLock reloads the current script.
 Reload
-ToolTip, Enikmas DualScreen Boxer Reloaded, A_ScreenWidth/2, A_ScreenHeight/2, 1
 Return
 ;--------------------------------------------------------------
 
@@ -79,6 +75,7 @@ gosub, pip
 Return 
 ~+Tab:: ; Sets your defined secondary window the the foreground
 gosub, swap
+gosub, dualscreen
 Return
 
 
@@ -141,12 +138,20 @@ return
 ~1::
 ~2::
 ~3::
+~4::
+~5::
+~6::
+~7::
+~8::
+~9::
+~0::
 ~g::
 ~f::
 ~q::
 ~e::
 ~r::
-
+~z::
+~x::
 
 IfWinActive, ahk_id %wowid1%
 {
@@ -154,7 +159,7 @@ StringTrimLeft, ThisKey, A_ThisHotKey, 1
 ControlSend,, %ThisKey%, ahk_id %wowid2%
 Return
 }
-
+Return
  
 ;**************************************************************
 ;************ SHIFT + Standard Keyboard Keys **************
@@ -174,7 +179,7 @@ StringTrimLeft, ThisKey, A_ThisHotKey, 1
 ControlSend,, {shift down}%thiskey%{shift up}, ahk_id %wowid1%
 Return
 }
- 
+Return
 ;**************************************************************
 ;*************** Special Hotkeys *****************
 ;**************************************************************
@@ -184,23 +189,30 @@ Return
 ControlSend,, {Numpad0}, ahk_id %wowid2%
 Return
 
-
 ~Numpad1::
 ControlSend,, {Numpad1}, ahk_id %wowid2%
 Return
 
-~Enter::
-IfWinActive, ahk_id %wowid1%
-{
-ControlSend,, {Enter}, ahk_id %wowid2%
+~Numpad2::
+ControlSend,, {Numpad2}, ahk_id %wowid2%
 Return
-}
-IfWinActive, ahk_id %wowid2%
-{
-ControlSend,, {Enter}, ahk_id %wowid1%
+
+~Numpad3::
+ControlSend,, {Numpad3}, ahk_id %wowid2%
 Return
-}
+
+~Numpad4::
+ControlSend,, {Numpad4}, ahk_id %wowid2%
 Return
+
+~Numpad5::
+ControlSend,, {Numpad5}, ahk_id %wowid2%
+Return
+
+~Numpad6::
+ControlSend,, {Numpad6}, ahk_id %wowid2%
+Return
+
 
  
 ;**************************************************************
