@@ -151,6 +151,7 @@ return
 ~e::
 ~r::
 ~z::
+~x::
 
 IfWinActive, ahk_id %wowid1%
 {
@@ -205,11 +206,11 @@ ControlSend,, {Numpad4}, ahk_id %wowid2%
 Return
 
 ~Numpad5::
-ControlSend,, {Numpad1}, ahk_id %wowid2%
+ControlSend,, {Numpad5}, ahk_id %wowid2%
 Return
 
 ~Numpad6::
-ControlSend,, {Numpad1}, ahk_id %wowid2%
+ControlSend,, {Numpad6}, ahk_id %wowid2%
 Return
 
 
