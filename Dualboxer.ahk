@@ -106,6 +106,7 @@ WinGetPos, x1, y1, w1, h1, ahk_id %wowid1%
 winmove, ahk_id %wowid2%, ,0,0,%w2a%,%h2a%
 winmaximize, ahk_id %wowid1%
 winset, alwaysontop, on, ahk_id %wowid2%
+winset, alwaysontop, off, ahk_id %wowid2%
 winactivate, ahk_id %wowid1%
 Return
 
